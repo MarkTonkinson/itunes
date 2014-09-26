@@ -4,39 +4,49 @@ app.controller('mainCtrl', function($scope, itunesService){
   //This is setting up the default behavior of our ng-grid. The important thing to note is
   //the 'data' property. The value is 'songData'. That means ng-grid is looking for songData on $scope and is putting whatever songData is into the grid.
   //this means when you make your iTunes request, you'll need to get back the information, parse it accordingly, then set it to songData on the scope -> $scope.songData = ...
+  $scope.filterOptions={
+    filterText:''
+  }
   $scope.gridOptions = { 
       data: 'songData',
       height: '110px',
+      filterOptions: $scope.filterOptions,
       sortInfo: {fields: ['Song', 'Artist', 'Collection', 'Type'], directions: ['asc']},
       columnDefs: [
         {field: 'Play', displayName: 'Play', width: '40px', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="{{row.getProperty(col.field)}}"><img src="http://www.icty.org/x/image/Miscellaneous/play_icon30x30.png"></a></div>'},
         {field: 'Song', displayName: 'Song'},
         {field: 'Artist', displayName: 'Artist'},
         {field: 'Collection', displayName: 'Collection'},
-        {field: 'AlbumArt', displayName: 'Album Art', width: '60px', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><img src="{{row.getProperty(col.field)}}"></div>'},
+        {field: 'AlbumArt', displayName: 'Album Art', width: '110px', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><img src="{{row.getProperty(col.field)}}"></div>'},
         {field: 'Type', displayName: 'Type'},
+        {field: 'SongPrice', displayName: 'Song Price'},
         {field: 'CollectionPrice', displayName: 'Collection Price'},
       ]
   };
 
+
   //Our controller is what's going to connect our 'heavy lifting' itunesService with our view (index.html) so our user can see the results they get back from itunes.
-
- 
-   
-
 
   //Now write a function that will call the method on the itunesService that is responsible for getting the data from iTunes, whenever the user clicks the submit button
   //*remember, that method should be expecting an artist name. The artist name is coming from the input box on index.html, head over there and check if that input box is tied to any specific model we could use.
   //Also note that that method should be retuning a promise, so you could use .then in this function.
+    $scope.search = {
+      artist: '',
+      type: 'all'
+    }
+
 
     $scope.getSongData = function(){
-      itunesService.getData($scope.artist)
+      songData=[];// cleans it each time it runs
+      itunesService.getData($scope.search)//this line $http calls for 
         .then(function(data){
         $scope.songData = refineData(data); //rather than calling the function and then returning it, we put it all into one line
         //pushSongData(refinedData);
         //console.log($scope.songData);
         })
     }
+
+    
 
 
   //Check that the above method is working by entering a name into the input field on your web app, and then console.log the result
@@ -56,14 +66,16 @@ app.controller('mainCtrl', function($scope, itunesService){
     var songData = [];
 
     var refineData = function(songs){  //songs is the data coming through the parameter where it is called above- just the information for the artist the person searched
-      debugger;
+      
       for(var i = 0; i < songs.length; i++) { //we loop through an array of objects
         var song = {  //we create an object that can catch the object parts we are pulling
+          Play: songs[i].previewUrl,
           Song: songs[i].trackName,
           Artist: songs[i].artistName, //each of these assigns the capitalized key that ng-grid recognizes
           Collection: songs[i].collectionName,// the songs[i] tells us when we are at an object, grab it's property name and assigns it to our new object
           AlbumArt: songs[i].artworkUrl60,//the new object is much smaller with less properties- their new names are the ng-grid names from above
           Type: songs[i].kind,
+          SongPrice: songs[i].trackPrice,
           CollectionPrice: songs[i].collectionPrice
         };
         songData.push(song);//we push the new song object to the songData array
@@ -72,12 +84,11 @@ app.controller('mainCtrl', function($scope, itunesService){
       return songData; //$scope.songData is going to need the array- we give the array after the loop is done and 
     }                  // this $scope.songData takes it back and is connected to the grid here in the javascript.
     
-    //I think we have to use $scope.songData to control that data- unless we use another then statement?
+    //I think we have to use $scope.songData to control that data- haha it says it underneath
 
 
   //Once you have that final data array, you simply need to put it on the scope (or more specifically on the scope as songData). Once you do this ($scope.songData = myFinalArray) then ng-grid will see that and populate the page.
 
-    //Code here
 });
 
 

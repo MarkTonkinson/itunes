@@ -11,21 +11,34 @@
       <div class="container">
         <div id="myContainer">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-music"></span> DevTunes</a>
+            <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-music"></span> MarkTunes (iTunes powered by Angular)</a>
           </div>
           <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
-              <input type="text" class="form-control" ng-model="artist" placeholder="Artist Name" >
-              <button class="btn btn-primary" ng-click="getSongData()"> Submit </button>
+              <input type="text" class="form-control" ng-model="search.artist" placeholder="Artist Name" ng-change="getSongData()">
+              
+              <select class="form-control" ng-model="search.type" ng-change="getSongData()"> <!--using media types by itunes in the JSON call-->
+                <option value="all">All</option>
+                <option value="music">Music</option>
+                <option value="musicVideo">Music Video</option>
+                <option value="movie">Movie</option>
+                <option value="podcast">Podcast</option>
+                <option value="tvShow">TV Show</option>
+              </select>
+              
+             <input class="form-control" type="text" placeholder="Search results" ng-model="filterOptions.filterText">
+              
+            
             </div>
           </form>
         </div>
       </div>
+       <div class="panel panel-default">
+        <div class="panel-heading"> Your Search Results:</div>
+       <div class="gridStyle" ng-grid="gridOptions" swap-image="defaultInfo.search"></div>
+      </div>
     </div>
-    <div class="panel panel-default">
-      <div class="panel-heading"> Your Search Results:</div>
-     <div class="gridStyle" ng-grid="gridOptions" swap-image="defaultInfo.search"></div>
-    </div>
+   
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/ng-grid/2.0.11/ng-grid.min.js"></script>
