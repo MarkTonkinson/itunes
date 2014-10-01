@@ -15,7 +15,7 @@
           </div>
           <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
-              <input type="text" class="form-control" ng-model="search.artist" placeholder="Artist Name" ng-change="getSongData()">
+              <input type="text" class="form-control" ng-model="search.artist" placeholder="Artist Name">
               
               <select class="form-control" ng-model="search.type" ng-change="getSongData()"> <!--using media types by itunes in the JSON call-->
                 <option value="all">All</option>
@@ -25,6 +25,8 @@
                 <option value="podcast">Podcast</option>
                 <option value="tvShow">TV Show</option>
               </select>
+
+              <button class="btn btn-primary" pending request="getSongData()"> Submit </button>
               
              <input class="form-control" type="text" placeholder="Search results" ng-model="filterOptions.filterText">
               
@@ -45,5 +47,7 @@
     <script src="js/app.js"></script>
     <script src="js/mainCtrl.js"></script>
     <script src="js/itunesService.js"></script>
+    <script src="js/myDirectives.js"></script>
+    <script src="js/pendingDirective.js"></script>
   </body>
 </html>

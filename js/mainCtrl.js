@@ -38,7 +38,7 @@ app.controller('mainCtrl', function($scope, itunesService){
 
     $scope.getSongData = function(){
       songData=[];// cleans it each time it runs
-      itunesService.getData($scope.search)//this line $http calls for 
+      return itunesService.getData($scope.search)//this line $http calls for 
         .then(function(data){
         $scope.songData = refineData(data); //rather than calling the function and then returning it, we put it all into one line
         //pushSongData(refinedData);

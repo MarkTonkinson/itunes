@@ -15,6 +15,7 @@ app.service('itunesService', function($http, $q){
     		method:'JSONP',
     		url: 'https://itunes.apple.com/search?term='+ search.artist + '&media=' + search.type +'&callback=JSON_CALLBACK'
     	}).then(function(data){
+        console.log(data);
     		var data = data.data.results;
     	   deferredPromise.resolve(data);
     	})
